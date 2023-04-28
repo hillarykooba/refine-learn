@@ -1,4 +1,4 @@
-import { AppwriteException } from "@refinedev/appwrite";
+import { AppwriteException, ID } from "@refinedev/appwrite";
 import { AuthBindings } from "@refinedev/core";
 
 import { account } from "./utility";
@@ -7,6 +7,24 @@ export const authProvider: AuthBindings = {
   login: async ({ email, password }) => {
     try {
       await account.createEmailSession(email, password);
+      return {
+        success: true,
+        redirectTo: "/",
+      };
+    } catch (error) {
+      const { type, message, code } = error as AppwriteException;
+      return {
+        success: false,
+        error: {
+          message,
+          name: `${code} - ${type}`,
+        },
+      };
+    }
+  },
+  register: async ({ email, password, name }) => {
+    try {
+      await account.create(ID.unique(), email, password, name);
       return {
         success: true,
         redirectTo: "/",

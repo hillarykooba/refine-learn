@@ -1,4 +1,4 @@
-import { Authenticated, GitHubBanner, Refine } from "@refinedev/core";
+import { Authenticated, Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
@@ -17,7 +17,9 @@ import routerBindings, {
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
+import { authProvider } from "authProvider";
 import { AppIcon } from "components/app-icon";
+import { LoginPage, RegisterPage } from "components/pages/auth/components";
 import {
   BlogPostCreate,
   BlogPostEdit,
@@ -30,10 +32,10 @@ import {
   CategoryList,
   CategoryShow,
 } from "pages/categories";
+import { OnBoarding } from "pages/onboarding";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { appwriteClient } from "utility";
-import { authProvider } from "./authProvider";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 
@@ -48,10 +50,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <GitHubBanner />
+      {/* <GitHubBanner /> */}
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <Refine
+            // dataProvider={firestoreDatabase.getDataProvider()}
+            // authProvider={firebaseAuth.getAuthProvider()}
             dataProvider={dataProvider(appwriteClient, {
               databaseId: "database",
             })}
@@ -107,10 +111,11 @@ function App() {
                   <Authenticated fallback={<CatchAllNavigate to="/login" />}>
                     <ThemedLayoutV2
                       Header={Header}
+                      OffLayoutArea={OnBoarding}
                       Title={({ collapsed }) => (
                         <ThemedTitleV2
                           collapsed={collapsed}
-                          text="refine Project"
+                          text="CTV Medias"
                           icon={<AppIcon />}
                         />
                       )}
@@ -120,23 +125,22 @@ function App() {
                   </Authenticated>
                 }
               >
+                <Route path="/onboarding" element={<OnBoarding />} />
                 <Route
                   index
                   element={<NavigateToResource resource="blog_posts" />}
                 />
-
                 <Route path="account">
                   <Route index element={<AntdInferencer />} />
                   <Route path="show/:id" element={<AntdInferencer />} />
                   <Route path="edit/:id" element={<AntdInferencer />} />
                   <Route path="create" element={<AntdInferencer />} />
                 </Route>
-
-                <Route path="/blog-posts">
+                <Route path="blog-posts">
                   <Route index element={<BlogPostList />} />
+                  <Route path="show/:id" element={<BlogPostShow />} />
                   <Route path="create" element={<BlogPostCreate />} />
                   <Route path="edit/:id" element={<BlogPostEdit />} />
-                  <Route path="show/:id" element={<BlogPostShow />} />
                 </Route>
                 <Route path="/categories">
                   <Route index element={<CategoryList />} />
@@ -145,6 +149,7 @@ function App() {
                   <Route path="show/:id" element={<CategoryShow />} />
                 </Route>
               </Route>
+
               <Route
                 element={
                   <Authenticated fallback={<Outlet />}>
@@ -152,31 +157,8 @@ function App() {
                   </Authenticated>
                 }
               >
-                <Route
-                  path="/login"
-                  element={
-                    <AuthPage
-                      type="login"
-                      title={
-                        <ThemedTitleV2
-                          collapsed={false}
-                          text="refine Project"
-                          icon={<AppIcon />}
-                        />
-                      }
-                      formProps={{
-                        initialValues: {
-                          email: "demo@refine.dev",
-                          password: "demodemo",
-                        },
-                      }}
-                    />
-                  }
-                />
-                <Route
-                  path="/register"
-                  element={<AuthPage type="register" />}
-                />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
                 <Route
                   path="/forgot-password"
                   element={<AuthPage type="forgotPassword" />}
@@ -190,7 +172,7 @@ function App() {
                       Title={({ collapsed }) => (
                         <ThemedTitleV2
                           collapsed={collapsed}
-                          text="refine Project"
+                          text="CTV Medias"
                           icon={<AppIcon />}
                         />
                       )}
