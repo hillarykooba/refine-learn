@@ -193,7 +193,7 @@ export const Header: React.FC = () => {
             </div>
           )}
         >
-          <a onClick={(e) => e.preventDefault()}>
+          <span>
             <Space>
               <Space style={{ marginLeft: "8px" }} size="middle">
                 {user?.name && <Text strong>{user.name}</Text>}
@@ -201,7 +201,7 @@ export const Header: React.FC = () => {
               </Space>
               <DownOutlined />
             </Space>
-          </a>
+          </span>
         </Dropdown>
       </Space>
     </AntdLayout.Header>
