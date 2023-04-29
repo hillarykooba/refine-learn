@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import React from "react";
 
 export const BlogPostCreate: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, saveButtonProps } = useForm();
 
   const { selectProps: categorySelectProps } = useSelect({
     resource: "categories",
