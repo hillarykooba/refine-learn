@@ -32,11 +32,13 @@ import {
   CategoryList,
   CategoryShow,
 } from "pages/categories";
+import { Dashboard } from "pages/dashboard";
 import { OnBoarding } from "pages/onboarding";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { appwriteClient } from "utility";
 import { Header } from "./components/header";
+import { UpdatePasswordPage } from "./components/pages/auth/components/updatePassword";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 
 function App() {
@@ -68,37 +70,41 @@ function App() {
             routerProvider={routerBindings}
             resources={[
               {
-                name: "blog_posts",
-                list: "/blog-posts",
-                create: "/blog-posts/create",
-                edit: "/blog-posts/edit/:id",
-                show: "/blog-posts/show/:id",
-                meta: {
-                  canDelete: true,
-                },
+                name: "dashboard",
+                list: "/",
               },
+              // {
+              //   name: "blog_posts",
+              //   list: "/blog-posts",
+              //   create: "/blog-posts/create",
+              //   edit: "/blog-posts/edit/:id",
+              //   show: "/blog-posts/show/:id",
+              //   meta: {
+              //     canDelete: true,
+              //   },
+              // },
 
-              {
-                name: "categories",
-                list: "/categories",
-                create: "/categories/create",
-                edit: "/categories/edit/:id",
-                show: "/categories/show/:id",
-                meta: {
-                  canDelete: true,
-                },
-              },
+              // {
+              //   name: "categories",
+              //   list: "/categories",
+              //   create: "/categories/create",
+              //   edit: "/categories/edit/:id",
+              //   show: "/categories/show/:id",
+              //   meta: {
+              //     canDelete: true,
+              //   },
+              // },
 
-              {
-                name: "account",
-                list: "/account",
-                create: "/account/create",
-                edit: "/account/edit/:id",
-                show: "/account/show/:id",
-                meta: {
-                  canDelete: true,
-                },
-              },
+              // {
+              //   name: "account",
+              //   list: "/account",
+              //   create: "/account/create",
+              //   edit: "/account/edit/:id",
+              //   show: "/account/show/:id",
+              //   meta: {
+              //     canDelete: true,
+              //   },
+              // },
             ]}
             options={{
               syncWithLocation: true,
@@ -111,7 +117,6 @@ function App() {
                   <Authenticated fallback={<CatchAllNavigate to="/login" />}>
                     <ThemedLayoutV2
                       Header={Header}
-                      OffLayoutArea={OnBoarding}
                       Title={({ collapsed }) => (
                         <ThemedTitleV2
                           collapsed={collapsed}
@@ -125,11 +130,9 @@ function App() {
                   </Authenticated>
                 }
               >
+                <Route index path="/" element={<Dashboard />} />
                 <Route path="/onboarding" element={<OnBoarding />} />
-                <Route
-                  index
-                  element={<NavigateToResource resource="blog_posts" />}
-                />
+
                 <Route path="account">
                   <Route index element={<AntdInferencer />} />
                   <Route path="show/:id" element={<AntdInferencer />} />
@@ -159,6 +162,10 @@ function App() {
               >
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route
+                  path="/reset-password"
+                  element={<UpdatePasswordPage />}
+                />
                 <Route
                   path="/forgot-password"
                   element={<AuthPage type="forgotPassword" />}

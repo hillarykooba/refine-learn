@@ -1,5 +1,4 @@
 import { GoogleOutlined } from "@ant-design/icons";
-import { ThemedTitle } from "@refinedev/antd";
 import {
   LoginFormTypes,
   LoginPageProps,
@@ -79,7 +78,13 @@ export const LoginPage: React.FC<LoginProps> = ({
           fontSize: "20px",
         }}
       >
-        {title ?? <ThemedTitle collapsed={false} />}
+        {/* {title ?? <ThemedTitle collapsed={false} />} */}
+        <h1
+          className="ant-typography css-dev-only-do-not-override-yp8pcc"
+          style={{ fontSize: "inherit", marginBottom: "0px", fontWeight: 700 }}
+        >
+          CTV Medias
+        </h1>
       </div>
     );
 

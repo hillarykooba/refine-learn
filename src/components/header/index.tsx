@@ -1,17 +1,30 @@
-import { DownOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  FireFilled,
+  LogoutOutlined,
+  NotificationOutlined,
+  QuestionCircleOutlined,
+  SettingOutlined,
+  SmileOutlined,
+  UserAddOutlined,
+  UserSwitchOutlined,
+  WindowsOutlined,
+} from "@ant-design/icons";
 import { useGetIdentity, useGetLocale, useSetLocale } from "@refinedev/core";
 import {
+  Layout as AntdLayout,
   Avatar,
   Button,
+  Divider,
   Dropdown,
-  Layout as AntdLayout,
   MenuProps,
   Space,
   Switch,
-  theme,
   Typography,
+  theme,
 } from "antd";
-import { useContext } from "react";
+import React, { useContext } from "react";
+
 import { useTranslation } from "react-i18next";
 
 import { ColorModeContext } from "../../contexts/color-mode";
@@ -35,6 +48,16 @@ export const Header: React.FC = () => {
 
   const currentLocale = locale();
 
+  const contentStyle = {
+    backgroundColor: token.colorBgElevated,
+    borderRadius: token.borderRadiusLG,
+    boxShadow: token.boxShadowSecondary,
+  };
+
+  const menuStyle = {
+    boxShadow: "none",
+  };
+
   const menuItems: MenuProps["items"] = [...(i18n.languages || [])]
     .sort()
     .map((lang: string) => ({
@@ -47,6 +70,71 @@ export const Header: React.FC = () => {
       ),
       label: lang === "en" ? "English" : "German",
     }));
+
+  const accountItems: MenuProps["items"] = [
+    {
+      key: "1",
+      icon: <SmileOutlined />,
+      label: (
+        <>
+          <Space style={{ marginLeft: "8px" }} size="middle">
+            {user?.name && <Text strong>{user.name}</Text>}
+            {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
+          </Space>
+        </>
+      ),
+    },
+    {
+      key: "2",
+      icon: <FireFilled />,
+      label: (
+        <>
+          Color Switch
+          <Switch
+            checkedChildren="🌛"
+            unCheckedChildren="🔆"
+            onChange={() => setMode(mode === "light" ? "dark" : "light")}
+            defaultChecked={mode === "dark"}
+          />
+        </>
+      ),
+    },
+    {
+      key: "3",
+      icon: <UserSwitchOutlined />,
+      label: <>Manage Accounts</>,
+    },
+    {
+      key: "4",
+      icon: <UserAddOutlined />,
+      label: <>Add Account</>,
+    },
+    {
+      key: "5",
+      icon: <SettingOutlined />,
+      label: <>Settings</>,
+    },
+    {
+      key: "6",
+      icon: <LogoutOutlined />,
+      label: <>Logout</>,
+    },
+  ];
+
+  const data = [
+    {
+      title: "Ant Design Title 1",
+    },
+    {
+      title: "Ant Design Title 2",
+    },
+    {
+      title: "Ant Design Title 3",
+    },
+    {
+      title: "Ant Design Title 4",
+    },
+  ];
 
   return (
     <AntdLayout.Header
@@ -74,16 +162,62 @@ export const Header: React.FC = () => {
             </Space>
           </Button>
         </Dropdown>
-        <Switch
+        <QuestionCircleOutlined />
+        <WindowsOutlined />
+        <NotificationOutlined />
+        {/* <Switch
           checkedChildren="🌛"
           unCheckedChildren="🔆"
           onChange={() => setMode(mode === "light" ? "dark" : "light")}
           defaultChecked={mode === "dark"}
-        />
-        <Space style={{ marginLeft: "8px" }} size="middle">
-          {user?.name && <Text strong>{user.name}</Text>}
-          {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
-        </Space>
+        /> */}
+
+        <Dropdown
+          menu={{ items: accountItems }}
+          dropdownRender={(menu) => (
+            <div style={contentStyle}>
+              {React.cloneElement(menu as React.ReactElement, {
+                style: menuStyle,
+              })}
+              <Divider style={{ margin: 0 }} />
+              {/* <Space style={{ padding: 8 }}>
+                <Row>
+                  <Col span={24}>
+                    <List
+                      itemLayout="horizontal"
+                      dataSource={data}
+                      renderItem={(item, index) => (
+                        <List.Item>
+                          <List.Item.Meta
+                            avatar={
+                              <Avatar
+                                src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+                              />
+                            }
+                            title={
+                              <a href="https://ant.design">{item.title}</a>
+                            }
+                            description="round applications, is refined by Ant UED Team"
+                          />
+                        </List.Item>
+                      )}
+                    />
+                  </Col>
+                </Row>
+              </Space> */}
+            </div>
+          )}
+        >
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              <Space style={{ marginLeft: "8px" }} size="middle">
+                {user?.name && <Text strong>{user.name}</Text>}
+                {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
+              </Space>
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
       </Space>
     </AntdLayout.Header>
   );

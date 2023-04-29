@@ -27,7 +27,28 @@ export const authProvider: AuthBindings = {
       await account.create(ID.unique(), email, password, name);
       return {
         success: true,
-        redirectTo: "/",
+        redirectTo: "/login",
+      };
+    } catch (error) {
+      const { type, message, code } = error as AppwriteException;
+      return {
+        success: false,
+        error: {
+          message,
+          name: `${code} - ${type}`,
+        },
+      };
+    }
+  },
+  forgotPassword: async ({ email }) => {
+    try {
+      await account.createRecovery(
+        email,
+        "http://localhost:3000/reset-password"
+      );
+      return {
+        success: true,
+        redirectTo: "/login",
       };
     } catch (error) {
       const { type, message, code } = error as AppwriteException;
